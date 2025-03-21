@@ -3,7 +3,7 @@ fn main()
 
         let x = 5;        
 
-        // Error occurs, because by default variable in rust is immutable for change you have to add mut keyboard when you declare variable
+        // Error occurs, because by default variable in rust is immutable, for change you have to add 'mut' keyboard when you declare variable
         // x = x + 1;
         // println!("{}", x);
 
@@ -93,11 +93,9 @@ fn main()
         let f: bool = false; // with explicit type annotation
 
         // The Character Type
-        
         // note that char type wraps with single qoute
         let ch = 'C';
         let z: char = 'Z'; // with explicit type annotation
-
 
         // Compound Types
         // Compound types can group multiple values into one type. Rust has two primitive compound types: tuples and arrays.
@@ -105,10 +103,12 @@ fn main()
         // Tuple type
         // Tuples have a fixed length: once declared, they cannot grow or shrink in size.
         let tup: (i32, f64, u8) = (500, 6.4, 1);
+
         // We can unpack tuple to several variable
         let (x, y, _) = tup;
         let (x, y, z) = tup;
         // Error occurs
+        // because my tuple has more member than my unpack variable.
         // let (x, y) = tup;
 
         // We can access to tuple element with dot(.) tuple.n
@@ -119,7 +119,6 @@ fn main()
         let empty_tuple = ();
         let empty_tuple: () = (); 
 
-
         // The Array Type
         // every element of an array must have the same type. Unlike arrays in some other languages, arrays in Rust have a fixed length.
 
@@ -128,12 +127,19 @@ fn main()
               "August", "September", "October", "November", "December"];
         
         let a: [i32; 5] = [1, 2, 3, 4, 5];
-        // init array
+        // You can also initialize an array to contain the same value for each element by specifying the initial value, 
+        // followed by a semicolon, and then the length of the array in square brackets
         let a = [3; 5];
+        // The array named a will contain 5 elements that will all be set to the value 3 initially.
+        // This is the same as writing let a = [3, 3, 3, 3, 3]; but in a more concise way.
 
         // access item value in array
         let first = a[0];
         let second = a[1];
+        
+        // accessing data in tuple and array are diffrent.
+        // in array, we use bracket to access value of index. but tuple uses dot(.) for accessing.
+
 
         // ==================================================================================================
 
