@@ -4,19 +4,61 @@ struct User {
     email: String,
     sign_in_count: u64,
 }
-
 // [ TITLE ] Using Tuple Structs Without Named Fields to Create Different Types
 struct Color(i32, i32, i32);
 struct Point(i32, i32, i32);
-
 // [ TITLE ] Unit-Like Structs Without Any Fields
 struct AlwaysEqual;
-
 // implement debug mode to print struct
 #[derive(Debug)]
 struct Rectangle {
     width: u32,
     height: u32,
+}
+
+// [ TITLE ] implements function for Rectangle struct
+/*
+    To define the function within the context of Rectangle, we start an impl (implementation) block for Rectangle.
+    Everything within this impl block will be associated with the Rectangle type.
+    Then we move the area function within the impl curly brackets and change the first (and in this case, only)
+    parameter to be self in the signature and everywhere within the body.
+*/
+impl Rectangle {
+    // we use &self instead of rectangle: &Rectangle. The &self is actually short for self: &Self.
+    // Within an impl block, the type Self is an alias for the type that the impl block is for.
+    // &self is shorthand of 'self: &Self'
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+
+    fn _test(self: &Self) -> () {
+        println!("This is a test text");
+    }
+
+    fn change_width(&mut self, width: u32) -> () {
+        self.width = width;
+    }
+
+    fn width(&self) -> bool {
+        self.width > 0
+    }
+
+    fn can_hold(&self, other: &Rectangle) -> bool {
+        (self.width > other.width) && (self.height > other.height)
+    }
+}
+
+// [ TITLE ] Multiple impl Blocks
+// Each struct is allowed to have multiple impl blocks
+// There’s no reason to separate these methods into multiple impl blocks here, but this is valid syntax.
+impl Rectangle {
+    // it's constructor and will return type which impl defined for
+    fn square(size: u32) -> Self {
+        Self {
+            width: size,
+            height: size,
+        }
+    }
 }
 
 fn main() {
@@ -46,7 +88,7 @@ fn main() {
     // };
 
     // with stuct update
-    let user3 = User {
+    let _user3 = User {
         email: String::from("another@example.com"),
         ..user1
     };
@@ -61,11 +103,11 @@ fn main() {
     // print!("{}", user1.username);
 
     // [ TITLE ] Using Tuple Structs Without Named Fields to Create Different Types
-    let black = Color(0, 0, 0);
-    let origin = Point(0, 0, 0);
+    let _black = Color(0, 0, 0);
+    let _origin = Point(0, 0, 0);
 
     // [ TITLE ] Unit-Like Structs Without Any Fields
-    let subject = AlwaysEqual;
+    let _subject = AlwaysEqual;
 
     // ---------------------------------------------------------------------------------------
     // [ TITLE ] An Example Program Using Structs
@@ -100,7 +142,7 @@ fn main() {
         area3(&rect3)
     );
 
-    // for print struct
+    // [ TITLE ] Print struct
     // first we add #[derive(Debug)] before our stuct definition
     // and use below syntax for printing.
     println!("{rect3:?}");
@@ -116,6 +158,60 @@ fn main() {
         as opposed to println!, which prints to the standard output console stream (stdout).
     */
     dbg!(&rect3);
+
+    let scale = 2;
+    let rect4 = Rectangle {
+        width: dbg!(30 * scale),
+        height: 50,
+    };
+
+    dbg!(&rect4);
+
+    // [ TITLE ] Defining Methods
+    let mut rect5 = Rectangle {
+        width: 30,
+        height: 40,
+    };
+
+    println!("Area of rect 5 is {}", rect5.area());
+
+    rect5.change_width(10);
+
+    println!("Area of rect 5 is {}", rect5.area());
+
+    /*
+        we can use a field within a method of the same name for any purpose.
+        In main, when we follow rect1.width with parentheses, Rust knows we mean the method width.
+        When we don’t use parentheses, Rust knows we mean the field width.
+    */
+    if rect5.width() {
+        println!("The rectangle has a nonzero width; it is {}", rect5.width);
+    }
+
+    // [ TITLE ] Methods with More Parameters
+    let rect6 = Rectangle {
+        width: 30,
+        height: 50,
+    };
+    let rect7 = Rectangle {
+        width: 10,
+        height: 40,
+    };
+    let rect8 = Rectangle {
+        width: 60,
+        height: 45,
+    };
+
+    // we can passed other rectangle reference to struct function to do something.
+    println!("Can rect1 hold rect2? {}", rect6.can_hold(&rect7));
+    println!("Can rect1 hold rect3? {}", rect6.can_hold(&rect8));
+
+    // [ TITLE ] Associated Functions
+    // All functions defined within an impl block are called associated functions
+    // Associated functions that aren’t methods are often used for constructors that will return a new instance of the struct.
+    // it uses :: namespace for declaring.
+    let sqr = Rectangle::square(20);
+    println!("{:?}", sqr);
 }
 
 fn area1(width: u32, height: u32) -> u32 {
@@ -130,7 +226,7 @@ fn area3(rect: &Rectangle) -> u32 {
     rect.width * rect.height
 }
 
-fn build_user(email: String, username: String) -> User {
+fn _build_user(email: String, username: String) -> User {
     // User {
     //     active: true,
     //     username: username,
